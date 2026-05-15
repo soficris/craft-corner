@@ -1,0 +1,170 @@
+
+    <main class="container mt-5 mb-5">
+
+        <div class="row justify-content-center">
+
+            <div class="col-md-8 col-lg-6">
+
+                <!-- Flash Messages -->
+                <%- include("../partials/messages") %>
+
+                <div class="profile-card p-4 bg-white shadow-sm"
+                    style="border-radius: 24px;">
+
+                    <h2 class="fw-bold mb-4 text-center"
+                        style="color: #5c3d2e;">
+
+                        Editar Perfil
+                    </h2>
+
+                    <form action="/profile/edit"
+                        method="POST"
+                        enctype="multipart/form-data">
+
+                        <!-- Foto -->
+                        <div class="text-center mb-4">
+
+                            <img src="<%= user.profilePicture ? 
+                                '/uploads/profiles/' + user.profilePicture : 
+                                '/images/default-profile.png' %>"
+                                alt="Foto de Perfil"
+                                class="avatar-preview rounded-circle shadow-sm border"
+                                id="profileImagePreview"
+                                width="120"
+                                height="120"
+                                style="object-fit: cover;">
+
+                            <div class="mt-3">
+
+                                <label for="profilePicture"
+                                    class="btn btn-outline-primary btn-sm rounded-pill px-4">
+
+                                    <i class="bi bi-camera me-2"></i>
+                                    Alterar Foto
+                                </label>
+
+                                <input type="file"
+                                    id="profilePicture"
+                                    name="profilePicture"
+                                    accept="image/*"
+                                    class="d-none">
+                            </div>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="mb-3">
+
+                            <label for="username"
+                                class="form-label fw-semibold">
+
+                                Nome de Usuário
+                            </label>
+
+                            <input type="text"
+                                class="form-control"
+                                id="username"
+                                name="username"
+                                value="<%= user.username %>"
+                                disabled>
+                        </div>
+
+                        <!-- Nome -->
+                        <div class="mb-3">
+
+                            <label for="fullName"
+                                class="form-label fw-semibold">
+
+                                Nome Completo
+                            </label>
+
+                            <input type="text"
+                                class="form-control"
+                                id="fullName"
+                                name="fullName"
+                                value="<%= user.fullName %>">
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="mb-4">
+
+                            <label for="bio"
+                                class="form-label fw-semibold">
+
+                                Bio
+                            </label>
+
+                            <textarea class="form-control"
+                                id="bio"
+                                name="bio"
+                                rows="3"
+                                maxlength="255"
+                                placeholder="Conte um pouco sobre seus projetos, hobbies e estilo criativo..."><%= user.bio %></textarea>
+
+                            <div id="bioHelp"
+                                class="form-text text-end">
+
+                                <span id="charCount">
+                                    <%= user.bio ? user.bio.length : 0 %>
+                                </span>/255
+                            </div>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="d-grid gap-2">
+
+                            <button type="submit"
+                                class="btn btn-lg rounded-pill fw-bold"
+                                style="background-color: #d99152; color: white;">
+
+                                Salvar Alterações
+                            </button>
+
+                            <a href="/feed"
+                                class="btn btn-outline-secondary btn-lg rounded-pill">
+
+                                Cancelar
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <%- include("../partials/footer") %>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        // Preview da imagem
+        document.getElementById("profilePicture")
+            .addEventListener("change", function (e) {
+
+                if (e.target.files && e.target.files[0]) {
+
+                    var reader = new FileReader();
+
+                    reader.onload = function (event) {
+
+                        document.getElementById("profileImagePreview").src =
+                            event.target.result;
+                    };
+
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+
+        // Contador da bio
+        const bioTextarea = document.getElementById("bio");
+        const charCountSpan = document.getElementById("charCount");
+
+        bioTextarea.addEventListener("input", function () {
+
+            charCountSpan.textContent = this.value.length;
+        });
+
+    </script>
